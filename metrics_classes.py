@@ -21,7 +21,7 @@ class SingleValueGauge(object):
         jsondata = collect(self.jsondata)
         metric = Metric(self.metric_name, "{}_{}".format(self.metric_name, self.hostname), 'gauge')
         metric.add_sample(self.metric_name, value=jsondata['data']['data']['value'],
-                          labels={ 'host': self.hostname, 'subvalue': 'None',
+                          labels={ 'host': self.hostname, '{}_subvalue'.format(self.metric_name): 'None',
                           })
         yield metric
 
@@ -44,55 +44,55 @@ class BiDirGauge(object):
                     metric.add_sample(self.metric_name, value=0,
                                       labels={
                                               'host': self.hostname,
-                                              'subvalue': self.metric_in
+                                              '{}_subvalue'.format(self.metric_name): self.metric_in
                                               })
                     metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][0]['value'],
                                       labels={
                                               'host': self.hostname,
-                                              'subvalue': self.metric_out
+                                              '{}_subvalue'.format(self.metric_name): self.metric_out
                                               })
                 elif "_".join(jsondata['data']['data']['data'][0]['key'].split(' ')) == self.metric_out:
                     metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][0]['value'],
                                       labels={
                                               'host': self.hostname,
-                                              'subvalue': self.metric_in
+                                              '{}_subvalue'.format(self.metric_name): self.metric_in
                                               })
                     metric.add_sample(self.metric_name, value=0,
                                       labels={
                                               'host': self.hostname,
-                                              'subvalue': self.metric_out
+                                              '{}_subvalue'.format(self.metric_name): self.metric_out
                                               })
             else:
                 metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][1]['value'],
                                   labels={
                                           'host': self.hostname,
-                                          'subvalue': self.metric_in
+                                          '{}_subvalue'.format(self.metric_name): self.metric_in
                                           })
                 metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][0]['value'],
                                   labels={
                                           'host': self.hostname,
-                                          'subvalue': self.metric_out
+                                          '{}_subvalue'.format(self.metric_name): self.metric_out
                                           })
             metric.add_sample(self.metric_name, value=jsondata['data']['data']['value'],
                               labels={
                                       'host': self.hostname,
-                                      'subvalue': 'total'
+                                      '{}_subvalue'.format(self.metric_name): 'total'
                                       })
         else:
             metric.add_sample(self.metric_name, value=0,
                               labels={
                                       'host': self.hostname,
-                                      'subvalue': self.metric_in
+                                      '{}_subvalue'.format(self.metric_name): self.metric_in
                                       })
             metric.add_sample(self.metric_name, value=0,
                               labels={
                                       'host': self.hostname,
-                                      'subvalue': self.metric_out
+                                      '{}_subvalue'.format(self.metric_name): self.metric_out
                                       })
             metric.add_sample(self.metric_name, value=jsondata['data']['data']['value'],
                               labels={
                                       'host': self.hostname,
-                                      'subvalue': 'total'
+                                      '{}_subvalue'.format(self.metric_name): 'total'
                                       })
         yield metric
 
@@ -112,11 +112,11 @@ class BucketsGauge(object):
                 metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][y]['value'],
                                   labels={
                                           'host': self.hostname,
-                                          'subvalue': "_".join(jsondata['data']['data']['data'][y]['key'].split(' '))
+                                          '{}_subvalue'.format(self.metric_name): "_".join(jsondata['data']['data']['data'][y]['key'].split(' '))
                                           })
         metric.add_sample(self.metric_name, value=jsondata['data']['data']['value'],
                           labels={
                                   'host': self.hostname,
-                                  'subvalue': 'total'
+                                  '{}_subvalue'.format(self.metric_name): 'total'
                                   })
         yield metric
