@@ -120,3 +120,39 @@ class BucketsGauge(object):
                                   '{}_subvalue'.format(self.metric_name): 'total'
                                   })
         yield metric
+
+class heatmap101(object):
+    def __init__(self, jsondata, metric_name, hostname):
+        self.jsondata = jsondata
+        self.metric_name = metric_name
+        self.hostname = "_".join(hostname.split('.'))
+
+    def collect(self):
+        jsondata = collect(self.jsondata)
+        metric = Metric(self.metric_name, '{} {}'.format(self.hostname, self.metric_name), 'gauge')
+        print(jsondata)
+        if 'data' in jsondata['data']['data']:
+            for y in range(len(jsondata['data']['data']['data'])):
+                try:
+                    exists = int((jsondata['data']['data']['data'][x]['key'])
+                except ValueError:
+                    pass
+            for x in range(101):
+                if x == exists:
+                    metric.add_sample(self.metric_name, value=jsondata['data']['data']['data'][x]['value'],
+                                      labels={
+                                              'host': self.hostname,
+                                              '{}_subvalue'.format(self.metric_name): "_".join(jsondata['data']['data']['data'][x]['key'].split(' '))
+                                                })
+                else:
+                    metric.add_sample(self.metric_name, value="0",
+                                      labels={
+                                              'host': self.hostname,
+                                              '{}_subvalue'.format(self.metric_name): str(x)+"%")
+                                                })
+        metric.add_sample(self.metric_name, value=jsondata['data']['data']['value'],
+                          labels={
+                                  'host': self.hostname,
+                                  '{}_subvalue'.format(self.metric_name): 'total'
+                                  })
+        yield metric
