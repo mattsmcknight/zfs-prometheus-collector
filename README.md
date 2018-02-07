@@ -18,3 +18,6 @@ To create a new URL it needs to be bundled according to the urls.py. Add the URL
 
 User credentials are stored in secrets.py. Create and secure this file, chmod 600.
 
+
+To start run with the hostname of the oracle server, and the local port for the app to listen on for prometheus scraper. 
+json-prometheus.py {hostname} {listen port}
